@@ -1,7 +1,7 @@
 ---
 title: "Cmake - Copy files to assets"
 category: "Android"
-date: "2024-04-20T18:20:03.284Z"
+date: "2024-04-20T18:20Z"
 description: "Cmake allows to copy files to assets so that it can be packaged into your `apk` or `aar`."
 ---
 Cmake allows to copy files to assets so that it can be packaged into your `apk` or `aar`.
