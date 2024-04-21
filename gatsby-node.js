@@ -101,6 +101,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     type Author {
       name: String
       summary: String
+      linkedin:String
     }
 
     type Social {
