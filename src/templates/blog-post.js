@@ -4,6 +4,7 @@ import { Link, graphql } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import Disqus from 'gatsby-plugin-disqus'
 
 const BlogPostTemplate = ({
   data: { previous, next, site, markdownRemark: post },
@@ -25,6 +26,10 @@ const BlogPostTemplate = ({
         <section
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
+        />
+         <Disqus 
+          identifier={post.id}
+          title={post.frontmatter.title}
         />
         <hr />
         <footer>
