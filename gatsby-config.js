@@ -12,7 +12,7 @@ module.exports = {
     title: `Technical Blog`,
     author: {
       name: `Siju Sakaria`,
-      summary: `- Senior Mobile developer`,
+      summary: `- Senior Mobile Developer`,
       linkedin: `siju-sakaria-b4311a21`
     },
     description: `A starter blog demonstrating what Gatsby can do.`,
