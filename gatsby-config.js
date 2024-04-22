@@ -7,6 +7,13 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+console.log("Node Environment:", process.env.NODE_ENV);
+console.log("GA_ID from env:", process.env.GA_ID);
+
+
 module.exports = {
   siteMetadata: {
     title: `Technical Blog`,
@@ -124,6 +131,24 @@ module.exports = {
             options: {
                 shortname: `https-sjtech-netlify-app`
             }
-    }
+    },
+    {
+      resolve: `gatsby-plugin-google-gtag`,
+     options: {
+       // You can add multiple tracking ids and a pageview event will be fired for all of them.
+       trackingIds: [
+         process.env.GA_ID, // Google Analytics / GA
+       ],
+       // This object is used for configuration specific to this plugin
+       pluginConfig: {
+         // Puts tracking script in the head instead of the body
+         head: true,
+         // Setting this parameter is also optional
+         respectDNT: true,
+         // Avoids sending pageview hits from custom paths
+         exclude: ["/preview/**", "/do-not-track/me/too/"],
+       },
+    },
+  }
   ],
 }

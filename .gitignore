@@ -83,3 +83,4 @@ package-lock.json
 .idea/
 .vscode/
 *.sw*
+.env
