@@ -1,6 +1,7 @@
 ---
 title: "Android - Change app icon"
 category: "Android"
+date: '2024-04-22'
 ---
 
 - We can change app icon using `activity-alias` in `AndroidManifest.xml`. Here, the `targetActivity` will be same but only the `alias-name` will be different.

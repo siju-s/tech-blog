@@ -5,6 +5,7 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import Disqus from 'gatsby-plugin-disqus'
+import { formatDate } from "../utils/date";
 
 const BlogPostTemplate = ({
   data: { previous, next, site, markdownRemark: post },
@@ -21,14 +22,8 @@ const BlogPostTemplate = ({
       >
         <header>
         <h1 itemProp="headline">{post.frontmatter.title}</h1>
-        {post.fields.createdDate && (
-          <p>
-            {new Date(post.fields.createdDate).toLocaleDateString("en-US", {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })}
-          </p>
+        {post.fields.createdDate && (          
+            formatDate(post.fields.createdDate)          
         )}
       </header>
         <section>

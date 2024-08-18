@@ -6,7 +6,9 @@
 const path = require(`path`)
 const fs = require('fs');
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const simpleGit = require('simple-git');
 
+const git = simpleGit();
 // Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.js`)
 
@@ -67,7 +69,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 /**
  * @type {import('gatsby').GatsbyNode['onCreateNode']}
  */
-exports.onCreateNode = ({ node, actions, getNode }) => {
+exports.onCreateNode = async ({ node, actions, getNode }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
@@ -76,17 +78,38 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     const filePath = path.join(__dirname, 'content', 'blog', fileNode.relativePath);
     const stats = fs.statSync(filePath);
 
+     // Use frontmatter date if available
+     const frontmatterDate = node.frontmatter && node.frontmatter.date;
+
+     let commitDate = null;
+
+     if (!frontmatterDate) {
+       // If frontmatter date is not available, get the git commit date
+       try {
+         const log = await git.log({ file: filePath });
+         commitDate = log.latest ? new Date(log.latest.date).toISOString() : null;
+       } catch (error) {
+         console.error(`Error fetching git log for file ${filePath}`, error);
+       }
+     }
+
     createNodeField({
       name: `slug`,
       node,
       value,
     })
 
+    const adjustedDate = new Date(frontmatterDate || commitDate || stats.birthtime.toISOString());
+    // Adjust date to ensure it's always in UTC
+    const utcDateString = new Date(adjustedDate.getTime() + adjustedDate.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+
+    console.log(`Utc Date for ${filePath}: ${utcDateString}`);
+
     // Generate creation date from the file's birth time
     createNodeField({
       name: `createdDate`,
       node,
-      value: stats.birthtime ? stats.birthtime.toISOString() : new Date().toISOString(),
+      value: utcDateString,
     });
 
     // Generate description from the first two lines of the content
@@ -137,11 +160,12 @@ exports.createSchemaCustomization = ({ actions }) => {
 
     type Frontmatter {
       title: String
+      date: Date @dateformat
     }
 
     type Fields {
       slug: String
-      createdDate: Date @dateformat
+      createdDate: String
       description: String
     }
   `)

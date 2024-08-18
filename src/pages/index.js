@@ -4,6 +4,7 @@ import { Link, graphql } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import { formatDate } from "../utils/date";
 
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
@@ -42,7 +43,7 @@ const BlogIndex = ({ data, location }) => {
                       <span itemProp="headline">{title}</span>
                     </Link>
                   </h2>
-                  <small>{new Date(post.fields.createdDate).toLocaleDateString()}</small>
+                  <small>{formatDate(post.fields.createdDate)}</small>
                 </header>
                 <section>
                   <p
