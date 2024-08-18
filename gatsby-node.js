@@ -3,8 +3,8 @@
  *
  * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
  */
-
 const path = require(`path`)
+const fs = require('fs');
 const { createFilePath } = require(`gatsby-source-filesystem`)
 
 // Define the template for blog post
@@ -19,11 +19,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get all markdown blog posts sorted by date
   const result = await graphql(`
     {
-      allMarkdownRemark(sort: { frontmatter: { date: ASC } }, limit: 1000) {
+      allMarkdownRemark(sort: { fields: {createdDate: ASC} }, limit: 1000) {
         nodes {
           id
           fields {
             slug
+            createdDate
+            description
           }
         }
       }
@@ -70,12 +72,32 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
   if (node.internal.type === `MarkdownRemark`) {
     const value = createFilePath({ node, getNode })
+    const fileNode = getNode(node.parent);
+    const filePath = path.join(__dirname, 'content', 'blog', fileNode.relativePath);
+    const stats = fs.statSync(filePath);
 
     createNodeField({
       name: `slug`,
       node,
       value,
     })
+
+    // Generate creation date from the file's birth time
+    createNodeField({
+      name: `createdDate`,
+      node,
+      value: stats.birthtime ? stats.birthtime.toISOString() : new Date().toISOString(),
+    });
+
+    // Generate description from the first two lines of the content
+    const content = node.rawMarkdownBody;
+    const description = content.split('\n').slice(0, 2).join(' ');
+
+    createNodeField({
+      name: `description`,
+      node,
+      value: description,
+    });
   }
 }
 
@@ -115,12 +137,12 @@ exports.createSchemaCustomization = ({ actions }) => {
 
     type Frontmatter {
       title: String
-      description: String
-      date: Date @dateformat
     }
 
     type Fields {
       slug: String
+      createdDate: Date @dateformat
+      description: String
     }
   `)
 }

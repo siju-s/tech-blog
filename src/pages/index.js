@@ -42,7 +42,7 @@ const BlogIndex = ({ data, location }) => {
                       <span itemProp="headline">{title}</span>
                     </Link>
                   </h2>
-                  <small>{post.frontmatter.date}</small>
+                  <small>{new Date(post.fields.createdDate).toLocaleDateString()}</small>
                 </header>
                 <section>
                   <p
@@ -77,16 +77,16 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
+    allMarkdownRemark(sort: { fields: {createdDate: DESC} }) {
       nodes {
         excerpt
         fields {
           slug
+          createdDate
+          description
         }
         frontmatter {
-          date(formatString: "MMMM DD, YYYY")
           title
-          description
         }
       }
     }

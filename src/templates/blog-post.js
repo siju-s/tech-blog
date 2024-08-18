@@ -20,13 +20,23 @@ const BlogPostTemplate = ({
         itemType="http://schema.org/Article"
       >
         <header>
-          <h1 itemProp="headline">{post.frontmatter.title}</h1>
-          <p>{post.frontmatter.date}</p>
-        </header>
-        <section
+        <h1 itemProp="headline">{post.frontmatter.title}</h1>
+        {post.fields.createdDate && (
+          <p>
+            {new Date(post.fields.createdDate).toLocaleDateString("en-US", {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
+          </p>
+        )}
+      </header>
+        <section>
+        <p
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
         />
+        </section>
          <Disqus 
           identifier={post.id}
           title={post.frontmatter.title}
@@ -92,10 +102,13 @@ export const pageQuery = graphql`
       id
       excerpt(pruneLength: 160)
       html
+      fields {
+        slug
+        createdDate
+        description
+      }
       frontmatter {
         title
-        date(formatString: "MMMM DD, YYYY")
-        description
       }
     }
     previous: markdownRemark(id: { eq: $previousPostId }) {
