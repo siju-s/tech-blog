@@ -1,8 +1,6 @@
 ---
 title: "Cmake - Pass build flags from gradle file"
 category: "Android"
-date: "2024-05-04T00:18Z"
-description: "To pass custom build flags from `build.gradle` file to Cmake, add the following to `android` block"
 ---
 To pass custom build flags from `build.gradle` file to Cmake, add the following to
 `android` block in `app\build.gradle` file
