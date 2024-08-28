@@ -44,3 +44,6 @@ date: "2024-08-27"
 - Acks from consumer so messages are not lost
 - Lot of tools support
 - Good security. Supports FASL, LDAP and TLS
+
+### References
+https://www.youtube.com/watch?v=7rkeORD4jSw
