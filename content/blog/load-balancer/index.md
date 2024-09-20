@@ -47,5 +47,7 @@ date: "2024-09-08"
 | **Use Case**            | Best for ensuring availability and performance of applications by distributing load | Best suited for microservices, handling API requests, and implementing cross-cutting concerns like security, versioning, etc. | Suitable for server anonymity, SSL offloading, or when the client should not directly access backend services |
 
 
+![image](IMG_3176.jpg)
+
 ### References
 https://www.youtube.com/watch?v=RqfaTIWc3LQ
